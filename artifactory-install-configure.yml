@@ -1,0 +1,15 @@
+---
+# This playbook install mysql server and Artifactory 
+
+- hosts: mysql
+  gather_facts: true
+  roles:
+    - role: mysql
+      packages_install_mysql: true
+
+- hosts: application
+  gather_facts: true
+  roles:
+     - role: artifactory
+     - role: nginx_config
+       install_self_signed_certs: true
