@@ -6,7 +6,7 @@
 - name: Install Java and  Artifactory
   yum: pkg={{ item }}
   with_items:
-   - jfrog-artifactory-pro
+   - jfrog-artifactory-pro-5.3.1
    - java
    - unzip
    - zip
@@ -24,7 +24,10 @@
 - name: Update Mysql Configuration
   template: src=../templates/db.properties dest=/etc/opt/jfrog/artifactory/db.properties
 
-- name: Restart the Artifactory service
-  service: name=artifactory state=restarted enabled=true
-  ignore_errors: True
+- name: Stop the Artifactory service
+  service: name=artifactory state=stopped enabled=true
+
+- name: Start the Artifactory service
+  service: name=artifactory state=started enabled=true
+
 
