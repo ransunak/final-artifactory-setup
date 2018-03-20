@@ -12,17 +12,36 @@
    - zip
    - wget
 
-- name: Download and Unzip MySQL JDBC jar file
-  unarchive: src=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.zip dest=/tmp/ remote_src=yes
+- name: Download mysql driver
+  get_url:
+     url: https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.zip
+     dest: /tmp/
+     mode: 0777
+  become: true
+
+- name: Extract mysql connecter zip
+  shell: unzip /tmp/mysql-connector-java-5.1.44.zip -d /tmp/
+  args:
+    creates: /tmp/mysql-connector-java-5.1.44
+  become: true
+
+#- name: Download and Unzip MySQL JDBC jar file
+#  unarchive: src=https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.44.zip dest=/tmp/ remote_src=yes
 
 - name: Copy the MySQL JDBC jar file
-  copy: src={{ item.src }} dest={{ item.dest }}
+  copy: src={{ item.src }} dest={{ item.dest }} owner=artifactory
   with_items:
     - { src: '/tmp/mysql-connector-java-5.1.44/mysql-connector-java-5.1.44-bin.jar', dest: '/opt/jfrog/artifactory/tomcat/lib/' }
     - { src: '/var/opt/jfrog/artifactory/misc/db/mysql.properties', dest: '/etc/opt/jfrog/artifactory/db.properties' }
  
 - name: Update Mysql Configuration
   template: src=../templates/db.properties dest=/etc/opt/jfrog/artifactory/db.properties
+
+- name: Include Artifactory license
+  template: src=../templates/artifactory.config.import.yml dest=/var/opt/jfrog/artifactory/etc/ owner=artifactory
+
+#- name: Security Configurations
+#  template: src=../templates/security.import.xml dest=/var/opt/jfrog/artifactory/etc/ owner=artifactory
 
 - name: Stop the Artifactory service
   service: name=artifactory state=stopped enabled=true

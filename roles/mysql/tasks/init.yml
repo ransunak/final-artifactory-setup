@@ -1,0 +1,57 @@
+---
+
+- name: Create Partition in secondary drive
+  parted:
+    device: /dev/xvdb
+    number: 1
+    state: present
+  become: true
+
+- name: Create ext4 filesystem
+  filesystem:
+     fstype: ext4
+     dev: /dev/xvdb1
+  become: true
+
+- name: Moving lib to lib.bak
+  command: mv /var/lib/ /var/lib.bak
+  args:
+    creates: /var/lib.bak
+  become: true
+
+- name: creating directory lib for mount
+  file:
+    path: /var/lib
+    state: directory
+  become: true
+
+- name: mount filesystem
+  mount:
+    name: /var/lib
+    src: /dev/xvdb1
+    fstype: ext4
+    state: mounted
+  become: true
+
+- name: Adding the record in fstab
+  mount:
+    name: /var/lib
+    src: /dev/xvdb1
+    fstype: ext4
+    state: present
+  become: true
+
+- name: copy lib.bak back to lib
+  shell: cp -rvpf /var/lib.bak/* /var/lib/
+  args:
+    creates: /var/lib/yum
+  become: true
+
+- name: Installing dependency package
+  yum: name={{ item }} state=present
+  with_items:
+      - git
+      - wget
+      - zip
+      - unzip
+  become: true

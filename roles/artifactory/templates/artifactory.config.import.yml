@@ -1,0 +1,58 @@
+---
+version: 1
+## This file is complementary to the JFrog Artifactory startup wizard, and may be used to specify the initial basic
+## settings for a new Artifactory installation, namely:
+## * License Key(s)
+## * Base URL
+## * Proxy
+## * Default repositories
+##
+##
+## HOW TO USE THIS FILE:
+##
+## To import these settings when bootstrapping Artifactory, save this file as artifactory.config.import.yml under Artifactory’s /etc folder
+## Artifactory will load this file if all of the following conditions are met:
+## - no repositories have been created
+## - a proxy has not been set up, or you did set up a proxy externally, but did not configure proxy setup through this file
+## - the base URL has not been set up, or you did set up the base URL externally, but did not configure the base URL setup through this file
+## - Artifactory has not been activated with a license, or Artifactory has been activated with a license, and you did not specify a license in this file
+##
+## To have any of these parameters automatically configured when you bootstrap an Artifactory instance using this file,
+## simply uncomment the relevant sections below, and where required, provide values.
+
+
+##################################################################################
+#                           General Configurations                               #
+##################################################################################
+GeneralConfiguration:
+
+  ## License key to import in onboarding
+  licenseKey : "cHJvZHVjdHM6CiAgYXJ0aWZhY3Rvcnk6CiAgICBwcm9kdWN0OiBaWGh3YVhKbGN6b2dNakF4T0Mw d05DMHhNbFF3T1RveE9Ub3lOeTQ1T0RoYUNtbGtPaUF3TnpZMk1UZzRaQzFsTW1ZeExUUmhaR0l0 T1RjMFlTMWtZbVU1TUdRNU1URmpOV1VLYjNkdVpYSTZJRWhsWld4dkNuQnliM0JsY25ScFpYTTZJ SHQ5Q25OcFoyNWhkSFZ5WlRvZ2JuVnNiQXAwY21saGJEb2dkSEoxWlFwMGVYQmxPaUJVVWtsQlRB cDJZV3hwWkVaeWIyMDZJREl3TVRndE1ETXRNVE5VTURrNk1UazZNamN1T1RnNFdnbz0KICAgIHNp Z25hdHVyZTogQ2VzbFg3MmZMZExZcXFPZDh3QVRuUDVEWm5mYXFCUGprZ01CNFh5cHR2Yng4Nklq c2hiYytJUHNUVGNrdkdEY1FPNUdZaURwVkM3Y1JqUDdvdFNjQVk5bFhZT0JHdXZYS1pseDQ2ZWNj TElqZ082Y0RPZit1V0EyVkpVdWNuVy9SVmcvbC96VlFVKzY3aVcrN0liVXlKQ0lkVFRReUkwSFZT bGtsNWVIZUJuQTVaN3JRUXVZOTZUYlVPMktmd0F4KzU4N2tOdWtkai8wbkQ3di9KVXZTaUVxOFN1 THB3OFhqWmNXMm54cit5R1M3dzMyU0JwODJwdk5nNmt1bUtLMVdxdUptTlhjeEJteVM1SlZ2WmFW bW5KaHM2amFmZnRuZEJnRkk1T1FFVGIrNCtnM1QyQXZaNG0xak5XNTBYVTdleWsvWlI5c3pCOVd5 Y3pVaWZrb0VnPT0KdmVyc2lvbjogMQo="
+
+
+  ## Setup the Artifactory base URL
+  ## For more information about the Artifactory base URL, please refer to
+  ## https://www.jfrog.com/confluence/display/RTF/Configuring+Artifactory#ConfiguringArtifactory-GeneralSettings
+  ## Uncomment the line below to set the Artifactory base URL
+  #baseUrl : "https://mycomp.arti.co"
+
+
+  ## Configure proxies for artifactory
+  ## For more information on configuring a proxy in Artifactory, please refer to
+  ## https://www.jfrog.com/confluence/display/RTF/Managing+Proxies
+  ## Uncomment the lines below to setup a proxy
+  proxies : 
+
+##################################################################################
+#                         Onboarding Configurations                              #
+##################################################################################
+OnboardingConfiguration:
+
+  ## Uncomment the package types for which you want to create default repositories
+  repoTypes :
+       - npm
+       - docker
+       - maven
+       - gradle
+       - sbt
+

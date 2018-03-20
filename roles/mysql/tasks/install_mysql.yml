@@ -17,11 +17,21 @@
   shell: "echo `grep 'temporary.*root@localhost' /var/log/mysqld.log | sed 's/.*root@localhost: //'`"
   register: mysql_root_password_temp
   tags: register
+  args:
+   creates: /tmp/mysqltemppass.txt
+
+- name: ensure file exists
+  copy:
+    content: ""
+    dest: /tmp/mysqltemppass.txt
+    force: no
+  become: true
 
 - name: Set the password from temporaty password
-  shell: 'mysql -e "SET PASSWORD = PASSWORD(''{{ Mysql_root_password }}'');" --connect-expired-password -u root -p"{{ mysql_root_password_temp.stdout }}"'
-  register: set_pass
-  failed_when: set_pass.rc >= 2
+  shell: 'mysql -e "SET PASSWORD = PASSWORD(''{{ Mysql_root_password }}'');" --connect-expired-password -u root -p"{{ mysql_root_password_temp.stdout }}" > /tmp/rootpasschange.txt'
+  args:
+    creates: /tmp/rootpasschange.txt
+  become: true
 
 - name: Remove test database if exists
   mysql_db: name=test state=absent login_user={{ DB_USER }} login_password={{ Mysql_root_password }}
@@ -36,4 +46,4 @@
   mysql_db: name={{ Mysql_Database }} state=present encoding=utf8 login_user={{ DB_USER }} login_password={{ Mysql_root_password }}
 
 - name: Create Artifactory user and Grant  Privileges
-  mysql_user: name={{ Mysql_Username }} password={{ Mysql_Password }} priv={{ Mysql_Database }}.*:ALL state=present host={{ Mysql_Host }} login_user={{ DB_USER }} login_password={{ Mysql_root_password }}
+  mysql_user: name={{ Mysql_Username }} password={{ Mysql_Password }} priv={{ Mysql_Database }}.*:ALL state=present host={{ Artifactory_Host }} login_user={{ DB_USER }} login_password={{ Mysql_root_password }}

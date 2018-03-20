@@ -23,6 +23,10 @@
 #  failed_when: "audit_result.rc != 0"
 #  changed_when: false
 
+- name: Set SELinux boolean to allow nginx to connect
+  seboolean: name=httpd_can_network_connect state=yes persistent=yes
+
+
 - name: Restart the Nginx service
   service: name=nginx state=restarted enabled=true
 

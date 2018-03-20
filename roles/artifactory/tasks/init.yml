@@ -1,0 +1,41 @@
+---
+
+- name: Create Partition in secondary drive
+  parted:
+    device: /dev/xvdb
+    unit: TB
+    label: gpt
+    number: 1
+    state: present
+  become: true
+
+- name: Create ext4 filesystem
+  filesystem:
+     fstype: ext4
+     dev: /dev/xvdb1
+  become: true
+
+- name: mount filesystem
+  mount:
+    name: /var/opt
+    src: /dev/xvdb1
+    fstype: ext4
+    state: mounted
+  become: true
+
+- name: Adding the record in fstab
+  mount:
+    name: /var/lib
+    src: /dev/xvdb1
+    fstype: ext4
+    state: present
+  become: true
+
+- name: Installing dependency package
+  yum: name={{ item }} state=present
+  with_items:
+      - git
+      - wget
+      - zip
+      - unzip
+  become: true

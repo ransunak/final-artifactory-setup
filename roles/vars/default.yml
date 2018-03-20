@@ -1,11 +1,11 @@
 ---
-Mysql_root_password: <Mysql_Root_Pass>
+Mysql_root_password: Naveen-123
 DB_USER: root
-Mysql_Database: <Mysql_DB_Name>
-Mysql_Username: <Mysql_DB_User>
-Mysql_Password: <Mysql_DBUser_Pass>
-Artifactory_Host: <Art_Host>
-Mysql_Host: <Mysql_Host>
-Artifactory_DNS: <Art_DNS>
+Mysql_Database: artb
+Mysql_Username: artifactory
+Mysql_Password: Artb-123
+Artifactory_Host: 52.89.248.30
+Mysql_Host: 52.89.248.30
+Artifactory_DNS: 52.89.248.30
 nginx_cert_path: /etc/nginx/ssl/nginx.crt
 nginx_key_path: /etc/nginx/ssl/nginx.key
